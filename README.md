@@ -1,4 +1,4 @@
-# Code Course Academy Project
+# Online Book Shop UI Project
 
 It is simple React front end project using Firebase Authentication mechanism & React Router DOM for routing. UI design is fully responsive.
 
@@ -31,4 +31,4 @@ It is simple React front end project using Firebase Authentication mechanism & R
 5. Register functionality
 6. `Products` page and `Product Details` page is accessible when user is logged in
 
--   Live URL: https://code-course-academy-ui.web.app/
+-   Live URL: 
