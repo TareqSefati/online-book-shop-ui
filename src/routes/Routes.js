@@ -9,5 +9,9 @@ export const ROUTES = {
         STATIC: "/products/:id",
         DYNAMIC: (id) => `/products/${id}`,
     },
+    SINGLE_CATEGORY: {
+        STATIC: "/categories/:name",
+        DYNAMIC: (name) => `/categories/${name}`,
+    },
   };
   

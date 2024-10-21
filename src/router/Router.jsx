@@ -10,6 +10,7 @@ import PrivateRouter from "./PrivateRouter";
 import AboutUs from "../components/AboutUs";
 import Faq from "../components/Faq";
 import Error from "../components/Error";
+import CategorizedBooks from "../components/CategorizedBooks";
 const router = createBrowserRouter([
 	{
 		path: `${ROUTES.HOME}`,
@@ -51,6 +52,17 @@ const router = createBrowserRouter([
 				loader: ({ params }) =>
 					fetch(
 						`https://code-course-academy-server.vercel.app/api/products/${params.id}`
+					),
+                errorElement: <Error />,
+			},
+			{
+				path: `${ROUTES.SINGLE_CATEGORY.STATIC}`,
+				element: (
+					<CategorizedBooks />
+				),
+				loader: ({ params }) =>
+					fetch(
+						`${import.meta.env.VITE_BACKEND_BOOKS_BY_CATEGORY_URL}/${params.name}`
 					),
                 errorElement: <Error />,
 			},

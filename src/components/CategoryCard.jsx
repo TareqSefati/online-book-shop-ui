@@ -20,7 +20,7 @@ export default function CategoryCard(props) {
             </h2>
           </div>
           <div className="card-actions justify-end">
-            <Link to={ROUTES.SINGLE_PRODUCT.DYNAMIC(category?.name)} target="_blank">
+            <Link to={ROUTES.SINGLE_CATEGORY.DYNAMIC(category?.name)} target="_blank">
               <button className="btn btn-neutral btn-sm">
                 See All Book
               </button>
