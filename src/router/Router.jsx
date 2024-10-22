@@ -11,6 +11,8 @@ import AboutUs from "../components/AboutUs";
 import Faq from "../components/Faq";
 import Error from "../components/Error";
 import CategorizedBooks from "../components/CategorizedBooks";
+import AllBooks from "../components/AllBooks";
+import BookDetails from "../components/BookDetails";
 const router = createBrowserRouter([
 	{
 		path: `${ROUTES.HOME}`,
@@ -29,29 +31,53 @@ const router = createBrowserRouter([
 				path: `${ROUTES.REGISTER}`,
 				element: <Register />,
 			},
+			// {
+			// 	path: `${ROUTES.PRODUCTS}`,
+			// 	element: (
+			// 		<PrivateRouter>
+			// 			<Products />
+			// 		</PrivateRouter>
+			// 	),
+			// 	loader: () =>
+			// 		fetch(
+			// 			`https://code-course-academy-server.vercel.app/api/products`
+			// 		),
+            //     errorElement: <Error />,
+			// },
 			{
-				path: `${ROUTES.PRODUCTS}`,
+				path: `${ROUTES.BOOKS}`,
 				element: (
-					<PrivateRouter>
-						<Products />
-					</PrivateRouter>
+					<AllBooks />
 				),
 				loader: () =>
 					fetch(
-						`https://code-course-academy-server.vercel.app/api/products`
+						`${import.meta.env.VITE_BACKEND_ALL_BOOKS_URL}`
 					),
                 errorElement: <Error />,
 			},
+			// {
+			// 	path: `${ROUTES.SINGLE_PRODUCT.STATIC}`,
+			// 	element: (
+			// 		<PrivateRouter>
+			// 			<ProductDetails />
+			// 		</PrivateRouter>
+			// 	),
+			// 	loader: ({ params }) =>
+			// 		fetch(
+			// 			`https://code-course-academy-server.vercel.app/api/products/${params.id}`
+			// 		),
+            //     errorElement: <Error />,
+			// },
 			{
-				path: `${ROUTES.SINGLE_PRODUCT.STATIC}`,
+				path: `${ROUTES.SINGLE_BOOK.STATIC}`,
 				element: (
-					<PrivateRouter>
-						<ProductDetails />
-					</PrivateRouter>
+					//<PrivateRouter>
+						<BookDetails />
+					//</PrivateRouter>
 				),
 				loader: ({ params }) =>
 					fetch(
-						`https://code-course-academy-server.vercel.app/api/products/${params.id}`
+						`${import.meta.env.VITE_BACKEND_ALL_BOOKS_URL}/${params.id}`
 					),
                 errorElement: <Error />,
 			},

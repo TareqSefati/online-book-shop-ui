@@ -74,8 +74,11 @@ export default function Navbar() {
 						<li>
 							<NavLink to={ROUTES.HOME}>Home</NavLink>
 						</li>
-						<li>
+						{/* <li>
 							<NavLink to={ROUTES.PRODUCTS}>Products</NavLink>
+						</li> */}
+						<li>
+							<NavLink to={ROUTES.BOOKS}>All Books</NavLink>
 						</li>
 						<li>
 							<NavLink to={ROUTES.ABOUT}>About</NavLink>

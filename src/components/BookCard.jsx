@@ -37,7 +37,7 @@ export default function BookCard({book}) {
                     
                     <p className="font-semibold">Price: <span className="italic font-mono">{price}$ </span></p>
                     <div className="card-actions justify-end">
-                        <Link to={ROUTES.SINGLE_PRODUCT.DYNAMIC(_id)}>
+                        <Link to={ROUTES.SINGLE_BOOK.DYNAMIC(_id)}>
                             <button className="btn btn-neutral btn-sm">
                                 View Details
                             </button>
