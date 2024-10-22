@@ -71,9 +71,9 @@ const router = createBrowserRouter([
 			{
 				path: `${ROUTES.SINGLE_BOOK.STATIC}`,
 				element: (
-					//<PrivateRouter>
+					<PrivateRouter>
 						<BookDetails />
-					//</PrivateRouter>
+					</PrivateRouter>
 				),
 				loader: ({ params }) =>
 					fetch(

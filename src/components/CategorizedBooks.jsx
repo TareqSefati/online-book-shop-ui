@@ -9,7 +9,7 @@ export default function CategorizedBooks() {
                 <h1
                     className="text-center font-semibold text-5xl mb-5"
                 >
-                    Available Books On &quot;{books?.[0].category}&quot; Category <br />
+                    Available Books On &quot;{books?.[0]?.category || "This"}&quot; Category <br />
                     <span className="text-xl">Total {books?.length} books found </span>
                 </h1>
                 <hr className="w-3/4 mx-auto" />
