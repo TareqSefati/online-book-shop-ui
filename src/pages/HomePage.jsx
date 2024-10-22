@@ -3,6 +3,8 @@ import Banner from "../components/Banner";
 import Categories from "../components/Categories";
 import ContactUs from "../components/ContactUs";
 import CourseGallery from "../components/CourseGallery";
+import Features from "../components/Features";
+import UserReview from "../components/UserReview";
 
 export default function HomePage() {
 	return (
@@ -10,9 +12,11 @@ export default function HomePage() {
             <Banner />
             {/* <Guidelines /> */}
             <Categories />
-            <CourseGallery />
+            <Features />
+            <UserReview />
+            {/* <CourseGallery />
             <ContactUs />
-            <AboutUs />
+            <AboutUs /> */}
         </div>
     );
 }
