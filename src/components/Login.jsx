@@ -114,8 +114,8 @@ export default function Login() {
 											<div className="relative w-full">
 												<input
 													className="block w-full border disabled:cursor-not-allowed disabled:opacity-50 bg-gray-50 border-gray-300
-                           text-gray-900 focus:border-cyan-500 focus:ring-cyan-500 dark:border-gray-600 dark:bg-gray-700
-                            dark:text-white dark:placeholder-gray-400 dark:focus:border-cyan-500 dark:focus:ring-cyan-500 p-2.5 text-sm rounded-md"
+                           							text-gray-900 focus:border-cyan-500 focus:ring-cyan-500 dark:border-gray-600 dark:bg-gray-700
+                            						dark:text-white dark:placeholder-gray-400 dark:focus:border-cyan-500 dark:focus:ring-cyan-500 p-2.5 text-sm rounded-md"
 													id="password"
 													type="password"
 													name="password"
@@ -139,7 +139,7 @@ export default function Login() {
 											</span>
 										</button>
 
-										<button
+										{/* <button
 											onClick={handleGoogleSignIn}
 											type="button"
 											className="btn btn-outline btn-error mt-2 rounded-md"
@@ -147,9 +147,9 @@ export default function Login() {
 											<span className="flex items-center justify-center gap-1 font-medium py-1 px-2.5 text-base false">
 												Sign in with Google
 											</span>
-										</button>
+										</button> */}
 
-										<button
+										{/* <button
 											onClick={handleGitHubSignIn}
 											type="button"
 											className="btn btn-outline mt-2 rounded-md"
@@ -157,7 +157,7 @@ export default function Login() {
 											<span className="flex items-center justify-center gap-1 font-medium py-1 px-2.5 text-base false">
 												Sign in with GitHub
 											</span>
-										</button>
+										</button> */}
 									</div>
 								</form>
 								<div className="min-w-[270px]">

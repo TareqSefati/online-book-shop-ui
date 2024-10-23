@@ -2,7 +2,11 @@ import { useLoaderData } from "react-router-dom";
 import BookCard from "./BookCard";
 
 export default function AllBooks() {
-    const books = useLoaderData();
+    const loaderData = useLoaderData();
+    let books = [];
+    if (loaderData instanceof Array) {
+        books = loaderData;
+    }
     return (
         <section>
             <div className="mb-5 mt-10">
