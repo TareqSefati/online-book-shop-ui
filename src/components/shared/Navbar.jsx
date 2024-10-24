@@ -93,26 +93,11 @@ export default function Navbar() {
 				<div className="navbar-end space-x-2">
 					{
 						user ? (
-							<div className="flex flex-col items-end gap-1">
-								<div className="flex items-center gap-1">
-									<img className="w-6 rounded-full" src={user.photoURL} />
-									<span>{user.displayName || user.email || 'User'}</span>
-								</div>
-								<div className="flex items-center gap-1">
-									{
-										dbUser ? (
-											<Link to={ROUTES.DASHBOARD}>
-												<button className="btn btn-sm btn-outline">
-													<FontAwesomeIcon icon={faTableColumns} size="xl" />
-												</button>
-											</Link>
-										):(
-											<div></div>
-										)
-									}
-									<button onClick={handleSignOut}><a className="btn btn-sm btn-outline btn-error">Logout</a></button>
-								</div>
-							</div>
+							<Link to={ROUTES.DASHBOARD}>
+								<button className="btn btn-sm btn-outline">
+									<FontAwesomeIcon icon={faTableColumns} size="xl" />
+								</button>
+							</Link>
 						) : (
 							<div className="space-x-2 flex gap-1 flex-col items-center md:flex-row">
 								<Link to={ROUTES.LOGIN}><a className="btn btn-sm md:btn">Login</a></Link>
