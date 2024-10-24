@@ -68,9 +68,11 @@ export default function AuthProvider({ children }) {
 		const unsubscribe = onAuthStateChanged(auth, async(currentUser) => {
 			console.log(currentUser);
 			setUser(currentUser);
-			const userFromDb = await getUserFromDb(currentUser);
-			console.log("User data from DB: ", userFromDb);
-			setDbUser(userFromDb);
+			if(currentUser?.uid){
+				const userFromDb = await getUserFromDb(currentUser);
+				console.log("User data from DB: ", userFromDb);
+				setDbUser(userFromDb);
+			}
 			setLoading(false);
 		});
 		return () => {
