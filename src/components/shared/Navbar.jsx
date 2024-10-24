@@ -2,10 +2,12 @@ import { Link, NavLink, useNavigate } from "react-router-dom";
 import { ROUTES } from "../../routes/Routes";
 import { useContext } from "react";
 import { AuthContext } from "../../provider/AuthProvider";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTableColumns} from '@fortawesome/free-solid-svg-icons';   
 
 export default function Navbar() {
 	const navigate = useNavigate();
-	const { user, logOut } = useContext(AuthContext);
+	const { user, dbUser, logOut } = useContext(AuthContext);
 	const handleSignOut = () => {
 		logOut()
 			.then(() => {
@@ -96,7 +98,20 @@ export default function Navbar() {
 									<img className="w-6 rounded-full" src={user.photoURL} />
 									<span>{user.displayName || user.email || 'User'}</span>
 								</div>
-								<button onClick={handleSignOut}><a className="btn btn-sm btn-outline btn-error">Logout</a></button>
+								<div className="flex items-center gap-1">
+									{
+										dbUser ? (
+											<Link to={ROUTES.DASHBOARD}>
+												<button className="btn btn-sm btn-outline">
+													<FontAwesomeIcon icon={faTableColumns} size="xl" />
+												</button>
+											</Link>
+										):(
+											<div></div>
+										)
+									}
+									<button onClick={handleSignOut}><a className="btn btn-sm btn-outline btn-error">Logout</a></button>
+								</div>
 							</div>
 						) : (
 							<div className="space-x-2 flex gap-1 flex-col items-center md:flex-row">

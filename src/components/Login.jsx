@@ -29,7 +29,7 @@ export default function Login() {
 				toast.success("User Login Successful", {
 					position: "top-right",
 				});
-				navigate(location?.state ? location.state : ROUTES.HOME);
+				navigate(location?.state ? location.state : ROUTES.DASHBOARD);
 			})
 			.catch((error) => {
 				console.log(error);

@@ -13,6 +13,7 @@ import Error from "../components/Error";
 import CategorizedBooks from "../components/CategorizedBooks";
 import AllBooks from "../components/AllBooks";
 import BookDetails from "../components/BookDetails";
+import Dashboard from "../components/Dashboard";
 const router = createBrowserRouter([
 	{
 		path: `${ROUTES.HOME}`,
@@ -79,6 +80,19 @@ const router = createBrowserRouter([
 					fetch(
 						`${import.meta.env.VITE_BACKEND_ALL_BOOKS_URL}/${params.id}`
 					),
+                errorElement: <Error />,
+			},
+			{
+				path: `${ROUTES.DASHBOARD}`,
+				element: (
+					<PrivateRouter>
+						<Dashboard/>
+					</PrivateRouter>
+				),
+				// loader: ({ params }) =>
+				// 	fetch(
+				// 		`${import.meta.env.VITE_BACKEND_ALL_BOOKS_URL}/${params.id}`
+				// 	),
                 errorElement: <Error />,
 			},
 			{
