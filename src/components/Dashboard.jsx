@@ -26,7 +26,7 @@ export default function Dashboard() {
     return (
         <div className="drawer lg:drawer-open border rounded-md shadow-lg mt-3">
             <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
-            <div className="drawer-content flex flex-col items-center justify-center">
+            <div className="drawer-content flex flex-col items-center">
                 {/* Page content here */}
                 <label htmlFor="my-drawer-2" className="btn btn-primary drawer-button lg:hidden">
                     Open drawer

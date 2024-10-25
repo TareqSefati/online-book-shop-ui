@@ -1,15 +1,23 @@
 
 export default function ViewProfile(props) {
-    const {user} = props;
-  return (
-    <div>
-        <h1>view the profile data only show: {user.name}</h1>
-        <h1>view the profile data only show: {user.email}</h1>
-        <h1>view the profile data only show: {user.address}</h1>
-        <h1>view the profile data only show: {user.phoneNumber}</h1>
-        <h1>view the profile data only show: {user.photoUrl}</h1>
-        <h1>view the profile data only show: {user.isAdmin}</h1>
-        <h1>view the profile data only show: {user.isEnabled}</h1>
-    </div>
-  )
+    const { user } = props;
+    return (
+        <div>
+            <div className="card card-side bg-base-100 shadow-xl">
+                <figure>
+                    <img className="rounded-full"
+                        src={user.photoUrl}
+                        alt="profile image" />
+                </figure>
+                <div className="card-body">
+                    <h2 className="card-title">{user.name}</h2>
+                    <p>Email: {user.email}</p>
+                    <p>Address: {user.address}</p>
+                    <p>Address: {user.address}</p>
+                    <p>Role: {user.isAdmin ? "Admin" : "User"}</p>
+                    <p>Status: {user.isEnabled ? "Active" : "Blocked"}</p>
+                </div>
+            </div>
+        </div>
+    )
 }
