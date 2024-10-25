@@ -52,7 +52,7 @@ const router = createBrowserRouter([
 				),
 				loader: () =>
 					fetch(
-						`${import.meta.env.VITE_BACKEND_ALL_BOOKS_URL}`
+						`${import.meta.env.VITE_BACKEND_BOOKS_URL}`
 					),
                 errorElement: <Error />,
 			},
@@ -78,7 +78,7 @@ const router = createBrowserRouter([
 				),
 				loader: ({ params }) =>
 					fetch(
-						`${import.meta.env.VITE_BACKEND_ALL_BOOKS_URL}/${params.id}`
+						`${import.meta.env.VITE_BACKEND_BOOKS_URL}/${params.id}`
 					),
                 errorElement: <Error />,
 			},
