@@ -57,6 +57,10 @@ export default function ManageBook() {
         document.getElementById('editModal').showModal();
     };
 
+    const openAddModal = ()=>{
+        document.getElementById('addModal').showModal();
+    }
+
     const handleCategoryChange = (e) => {
         setSelectedCategory(e.target.value);
     }
@@ -78,6 +82,44 @@ export default function ManageBook() {
                 return null;
             });
         return displayUrl;
+    }
+
+    const processBookData = async (event)=>{
+        const form = new FormData(event.currentTarget);
+        console.log("Form data", form);
+        const name = form.get("name");
+        const author = form.get("author");
+        const photo = form.get("photo");
+        const pages = form.get("pages");
+        const rating = form.get("rating");
+        const category = form.get("category");
+        const publisher = form.get("publisher");
+        const yearOfPublishing = form.get("yearOfPublishing");
+        const synopsis = form.get("synopsis");
+        const price = form.get("price");
+
+        let photoUrl = "https://i.ibb.co.com/TYSgwLR/default-profile-img.jpg";
+        if (photo) {
+            const photoData = new FormData();
+            photoData.append('image', photo);
+            const url = await uploadImage(photoData);
+            if (url) {
+                photoUrl = url;
+            }
+        }
+        const bookData = {
+            name,
+            author,
+            photoUrl,
+            pages,
+            rating,
+            category,
+            publisher,
+            yearOfPublishing,
+            synopsis,
+            price
+        };
+        return bookData;
     }
 
     const editBook = async (event) => {
@@ -151,6 +193,44 @@ export default function ManageBook() {
         })
     }
 
+    const addBook = async (event) =>{
+        event.preventDefault();
+        console.log("Try to Add book");
+        const bookData = await processBookData(event);
+        console.log("Add book data: ", bookData);
+
+        fetch(bookBackendUrl, {
+            method: "POST",
+            headers: {
+                "content-type": "application/json",
+            },
+            body: JSON.stringify(bookData),
+        })
+        .then((res) => res.json())
+        .then((data) => {
+            console.log(data);
+            if (data?.insertedId) {
+                toast.success("Book Added Successfully", {
+                    position: "top-right",
+                });
+                fetch(bookBackendUrl)
+                .then((res) => res.json())
+                .then((data) => {
+                    console.log(data);
+                    setBooks(data);
+                })
+            }
+            document.getElementById('addModal').close();
+            event.target.reset(); //to clear inpur fields after submit- but it does not work here due to default value.
+        })
+        .catch((err)=>{
+            toast.error("Book Added Failed!", {
+                position: "top-right",
+            });
+            console.log("Error", err);
+        })
+    }
+
     return (
         <div>
             <div className="text-center mt-5 font-semibold text-2xl">
@@ -158,7 +238,7 @@ export default function ManageBook() {
                 <h3>Total Book {books.length}</h3>
             </div>
             <div className="flex justify-end mb-2">
-                <button onClick={"openAddModal"} className="btn btn-sm btn-outline btn-primary">
+                <button onClick={openAddModal} className="btn btn-sm btn-outline btn-primary">
                     <FontAwesomeIcon icon={faPlus} size="sm" />
                 </button>
             </div>
@@ -458,6 +538,270 @@ export default function ManageBook() {
                 </div>
             </dialog>
             {/*Edit Book modal end */}
+
+            {/*Add Book modal start */}
+            <dialog id="addModal" className="modal sm:modal-middle">
+                <div className="modal-box">
+                    <form
+                        onSubmit={addBook} method="dialog"
+                        className="flex flex-col gap-4 pb-4"
+                    >
+                        <h1 className="mb-4 text-2xl font-bold dark:text-white text-center">
+                            Add New Book
+                        </h1>
+
+                        <div>
+                            <div className="mb-2">
+                                <label
+                                    className="text-sm font-medium text-gray-900 dark:text-gray-300"
+                                    htmlFor="name"
+                                >
+                                    Name
+                                </label>
+                            </div>
+                            <div className="flex w-full rounded-lg pt-1">
+                                <div className="relative w-full">
+                                    <input
+                                        className="block w-full border disabled:cursor-not-allowed disabled:opacity-50 bg-gray-50 border-gray-300 text-gray-900 focus:border-cyan-500 focus:ring-cyan-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-cyan-500 dark:focus:ring-cyan-500 p-2.5 text-sm rounded-md"
+                                        id="name"
+                                        type="text"
+                                        name="name"
+                                        placeholder="Book Name"
+                                        autoComplete="on"
+                                        required
+                                    ></input>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div className="mb-2">
+                                <label
+                                    className="text-sm font-medium text-gray-900 dark:text-gray-300"
+                                    htmlFor="author"
+                                >
+                                    Author
+                                </label>
+                            </div>
+                            <div className="flex w-full rounded-lg pt-1">
+                                <div className="relative w-full">
+                                    <input
+                                        className="block w-full border disabled:cursor-not-allowed disabled:opacity-50 bg-gray-50 border-gray-300 text-gray-900 focus:border-cyan-500 focus:ring-cyan-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-cyan-500 dark:focus:ring-cyan-500 p-2.5 text-sm rounded-md"
+                                        id="author"
+                                        type="text"
+                                        name="author"
+                                        placeholder="Author Name"
+                                        autoComplete="on"
+                                        required
+                                    ></input>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div className="mb-2">
+                                <label
+                                    className="text-sm font-medium text-gray-900 dark:text-gray-300"
+                                    htmlFor="photo"
+                                >
+                                    Photo
+                                </label>
+                            </div>
+                            <div className="flex w-full rounded-lg pt-1">
+                                <div className="relative w-full">
+                                    <input
+                                        className="block w-full border disabled:cursor-not-allowed disabled:opacity-50 bg-gray-50 border-gray-300 text-gray-900 focus:border-cyan-500 focus:ring-cyan-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-cyan-500 dark:focus:ring-cyan-500 p-2.5 text-sm rounded-md"
+                                        id="photo"
+                                        type="file"
+                                        name="photo"
+                                        placeholder="Select book cover photo"
+                                        autoComplete="on"
+                                    ></input>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div className="mb-2">
+                                <label
+                                    className="text-sm font-medium text-gray-900 dark:text-gray-300"
+                                    htmlFor="pages"
+                                >
+                                    Pages
+                                </label>
+                            </div>
+                            <div className="flex w-full rounded-lg pt-1">
+                                <div className="relative w-full">
+                                    <input
+                                        className="block w-full border disabled:cursor-not-allowed disabled:opacity-50 bg-gray-50 border-gray-300 text-gray-900 focus:border-cyan-500 focus:ring-cyan-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-cyan-500 dark:focus:ring-cyan-500 p-2.5 text-sm rounded-md"
+                                        id="pages"
+                                        type="text"
+                                        name="pages"
+                                        placeholder="Page Number"
+                                        autoComplete="on"
+                                        required
+                                    ></input>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div className="mb-2">
+                                <label
+                                    className="text-sm font-medium text-gray-900 dark:text-gray-300"
+                                    htmlFor="rating"
+                                >
+                                    Rating
+                                </label>
+                            </div>
+                            <div className="flex w-full rounded-lg pt-1">
+                                <div className="relative w-full">
+                                    <input
+                                        className="block w-full border disabled:cursor-not-allowed disabled:opacity-50 bg-gray-50 border-gray-300 text-gray-900 focus:border-cyan-500 focus:ring-cyan-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-cyan-500 dark:focus:ring-cyan-500 p-2.5 text-sm rounded-md"
+                                        id="rating"
+                                        type="text"
+                                        name="rating"
+                                        placeholder="Rating"
+                                        autoComplete="on"
+                                        required
+                                    ></input>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div className="mb-2">
+                                <label
+                                    className="text-sm font-medium text-gray-900 dark:text-gray-300"
+                                    htmlFor="publisher"
+                                >
+                                    Publisher
+                                </label>
+                            </div>
+                            <div className="flex w-full rounded-lg pt-1">
+                                <div className="relative w-full">
+                                    <input
+                                        className="block w-full border disabled:cursor-not-allowed disabled:opacity-50 bg-gray-50 border-gray-300 text-gray-900 focus:border-cyan-500 focus:ring-cyan-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-cyan-500 dark:focus:ring-cyan-500 p-2.5 text-sm rounded-md"
+                                        id="publisher"
+                                        type="text"
+                                        name="publisher"
+                                        placeholder="Publisher"
+                                        autoComplete="on"
+                                        required
+                                    ></input>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div className="mb-2">
+                                <label
+                                    className="text-sm font-medium text-gray-900 dark:text-gray-300"
+                                    htmlFor="yearOfPublishing"
+                                >
+                                    Year of Publishing
+                                </label>
+                            </div>
+                            <div className="flex w-full rounded-lg pt-1">
+                                <div className="relative w-full">
+                                    <input
+                                        className="block w-full border disabled:cursor-not-allowed disabled:opacity-50 bg-gray-50 border-gray-300 text-gray-900 focus:border-cyan-500 focus:ring-cyan-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-cyan-500 dark:focus:ring-cyan-500 p-2.5 text-sm rounded-md"
+                                        id="yearOfPublishing"
+                                        type="text"
+                                        name="yearOfPublishing"
+                                        placeholder="Publishing Year"
+                                        autoComplete="on"
+                                        required
+                                    ></input>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div className="mb-2">
+                                <label
+                                    className="text-sm font-medium text-gray-900 dark:text-gray-300"
+                                    htmlFor="price"
+                                >
+                                    Price
+                                </label>
+                            </div>
+                            <div className="flex w-full rounded-lg pt-1">
+                                <div className="relative w-full">
+                                    <input
+                                        className="block w-full border disabled:cursor-not-allowed disabled:opacity-50 bg-gray-50 border-gray-300 text-gray-900 focus:border-cyan-500 focus:ring-cyan-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-cyan-500 dark:focus:ring-cyan-500 p-2.5 text-sm rounded-md"
+                                        id="price"
+                                        type="text"
+                                        name="price"
+                                        placeholder="Price"
+                                        autoComplete="on"
+                                        required
+                                    ></input>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div className="mb-2">
+                                <label
+                                    className="text-sm font-medium text-gray-900 dark:text-gray-300"
+                                    htmlFor="category"
+                                >
+                                    Category
+                                </label>
+                            </div>
+                            <div className="flex w-full rounded-lg pt-1">
+                                <div className="relative w-full">
+                                    <select className="block w-full border disabled:cursor-not-allowed disabled:opacity-50 bg-gray-50 border-gray-300 text-gray-900 focus:border-cyan-500 focus:ring-cyan-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-cyan-500 dark:focus:ring-cyan-500 p-2.5 text-sm rounded-md"
+                                        value={selectedCategory}
+                                        onChange={handleCategoryChange}
+                                        name="category"
+                                    >
+                                        <option value="⬇️ Select a Category ⬇️">-- Select a Category --</option>
+                                        {category.map((item) => (
+                                            <option key={item._id} value={item.name}>
+                                                {item.name}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div className="mb-2">
+                                <label
+                                    className="text-sm font-medium text-gray-900 dark:text-gray-300"
+                                    htmlFor="synopsis"
+                                >
+                                    Synopsis
+                                </label>
+                            </div>
+                            <div className="flex w-full rounded-lg pt-1">
+                                <div className="relative w-full">
+                                    <textarea
+                                        className="block w-full border disabled:cursor-not-allowed disabled:opacity-50 bg-gray-50 border-gray-300 text-gray-900 focus:border-cyan-500 focus:ring-cyan-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-cyan-500 dark:focus:ring-cyan-500 p-2.5 text-sm rounded-md"
+                                        id="synopsis"
+                                        type="text"
+                                        name="synopsis"
+                                        placeholder="Synopsis"
+                                        autoComplete="on"
+                                        required
+                                    ></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="flex flex-col gap-2">
+                            <button type="submit"
+                                className="btn btn-outline btn-info rounded-md"
+                            >
+                                <span className="flex items-center justify-center gap-1 font-medium py-1 px-2.5 text-base false">
+                                    Add New Book
+                                </span>
+                            </button>
+                            <p className="btn btn-outline rounded-md" onClick={() => document.getElementById('addModal').close()}>
+                                <span className="flex items-center justify-center gap-1 font-medium py-1 px-2.5 text-base false">
+                                    Cancel
+                                </span>
+                            </p>
+
+                        </div>
+                    </form>
+                </div>
+            </dialog>
+            {/*Add Book modal end */}
         </div>
     )
 }
