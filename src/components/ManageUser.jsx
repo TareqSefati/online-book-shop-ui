@@ -135,7 +135,7 @@ export default function ManageUser({ dbUser }) {
                         <tr>
                             <th>Name</th>
                             <th>Email</th>
-                            <th>Admin</th>
+                            <th>Role</th>
                             <th>Status</th>
                             <th>Action</th>
                         </tr>

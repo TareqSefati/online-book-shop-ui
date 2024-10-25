@@ -5,6 +5,7 @@ import { ROUTES } from "../routes/Routes";
 import EditProfileData from "./EditProfileData";
 import ViewProfile from "./ViewProfile";
 import ManageUser from "./ManageUser";
+import ManageCategory from "./ManageCategory";
 
 export default function Dashboard() {
     const [selectedMenuItem, setSelectedMenuItem] = useState("view_profile");
@@ -36,7 +37,7 @@ export default function Dashboard() {
                     { selectedMenuItem === 'view_profile' && <ViewProfile user={dbUser} /> }
                     { selectedMenuItem === 'edit' && <EditProfileData setSelectedMenuItem={setSelectedMenuItem}/> }
                     {selectedMenuItem === 'users' && <ManageUser dbUser={dbUser} /> }
-                    {selectedMenuItem === 'category' && <h1>category data edit in here</h1>}
+                    {selectedMenuItem === 'category' && <ManageCategory /> }
                     {selectedMenuItem === 'books' && <h1>books data edit in here</h1>}
                     {selectedMenuItem === 'my_books' && <h1>my_books data edit in here</h1>}
                     {selectedMenuItem === 'payment' && <h1>payment data edit in here</h1>}
