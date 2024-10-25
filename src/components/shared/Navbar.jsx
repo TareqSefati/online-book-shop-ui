@@ -1,4 +1,4 @@
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { ROUTES } from "../../routes/Routes";
 import { useContext } from "react";
 import { AuthContext } from "../../provider/AuthProvider";
@@ -6,17 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTableColumns} from '@fortawesome/free-solid-svg-icons';   
 
 export default function Navbar() {
-	const navigate = useNavigate();
-	const { user, dbUser, logOut } = useContext(AuthContext);
-	const handleSignOut = () => {
-		logOut()
-			.then(() => {
-				navigate(ROUTES.LOGIN);
-			})
-			.catch((error) => {
-				console.log(error);
-			});
-	};
+	const { user } = useContext(AuthContext);
 	return (
 		<header>
 			<nav className="navbar bg-base-100">

@@ -48,8 +48,12 @@ export default function AuthProvider({ children }) {
 		return signOut(auth);
 	};
 
-	const getUserFromDb = async(firebaseUser)=>{
-		const url = `${import.meta.env.VITE_BACKEND_USER_BY_UID_URL}/${firebaseUser.uid}`;
+	const updateDbUser = (updatedDbUser)=>{
+		setDbUser(updatedDbUser)
+	}
+
+	const getUserFromDb = async(uid)=>{
+		const url = `${import.meta.env.VITE_BACKEND_USER_URL}/${uid}`;
 		console.log("User from db url: ", url);
 		const user = await fetch(url)
 					.then((res)=>res.json())
@@ -69,7 +73,7 @@ export default function AuthProvider({ children }) {
 			console.log(currentUser);
 			setUser(currentUser);
 			if(currentUser?.uid){
-				const userFromDb = await getUserFromDb(currentUser);
+				const userFromDb = await getUserFromDb(currentUser?.uid);
 				console.log("User data from DB: ", userFromDb);
 				setDbUser(userFromDb);
 			}
@@ -84,6 +88,7 @@ export default function AuthProvider({ children }) {
 		dbUser,
 		loading,
 		createUser,
+		updateDbUser,
 		signIn,
 		googleSignIn,
 		githubSignIn,
