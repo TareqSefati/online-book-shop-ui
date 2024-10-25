@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { ROUTES } from "../routes/Routes";
 import EditProfileData from "./EditProfileData";
 import ViewProfile from "./ViewProfile";
+import ManageUser from "./ManageUser";
 
 export default function Dashboard() {
     const [selectedMenuItem, setSelectedMenuItem] = useState("view_profile");
@@ -33,8 +34,8 @@ export default function Dashboard() {
                 </label>
                 <div className="">
                     { selectedMenuItem === 'view_profile' && <ViewProfile user={dbUser} /> }
-                    { selectedMenuItem === 'edit' && <EditProfileData/> }
-                    {selectedMenuItem === 'users' && <h1>users data edit in here</h1>}
+                    { selectedMenuItem === 'edit' && <EditProfileData setSelectedMenuItem={setSelectedMenuItem}/> }
+                    {selectedMenuItem === 'users' && <ManageUser dbUser={dbUser} /> }
                     {selectedMenuItem === 'category' && <h1>category data edit in here</h1>}
                     {selectedMenuItem === 'books' && <h1>books data edit in here</h1>}
                     {selectedMenuItem === 'my_books' && <h1>my_books data edit in here</h1>}
@@ -54,7 +55,7 @@ export default function Dashboard() {
                                 ><a className="btn btn-xs btn-outline">Edit Profile</a>
                             </button>
                             <button onClick={handleSignOut}>
-                                <a className="btn btn-xs btn-outline btn-error">Logout</a>
+                            <a className="btn btn-xs btn-outline btn-error">Logout</a>
                             </button>
                         </div>
                         <hr/>
@@ -64,6 +65,11 @@ export default function Dashboard() {
                         {
                             dbUser?.isAdmin ? (
                                 <div>
+                                    <Link onClick={() => handleMenuItemClick('view_profile')}>
+                                        <li>
+                                            <a>My Profile <span className="font-semibold text-green-800">(Admin)</span></a>
+                                        </li>
+                                    </Link>
                                     <Link onClick={() => handleMenuItemClick('users')}>
                                         <li>
                                             <a>Users</a>

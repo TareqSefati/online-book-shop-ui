@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { AuthContext } from "../provider/AuthProvider";
 import toast from "react-hot-toast";
 
-export default function EditProfileData() {
+export default function EditProfileData({setSelectedMenuItem}) {
     const { dbUser, updateDbUser } = useContext(AuthContext);
     const editUser = async (event) => {
         event.preventDefault();
@@ -50,7 +50,7 @@ export default function EditProfileData() {
                     address
                 };
                 updateDbUser(newDbUser);
-                // todo: now show the view profile component in here.
+                setSelectedMenuItem("view_profile");
             }
             //event.target.reset(); //this is for clear the input text fields after submit- but it does not work here due to default value.
         })
