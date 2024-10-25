@@ -6,6 +6,7 @@ import EditProfileData from "./EditProfileData";
 import ViewProfile from "./ViewProfile";
 import ManageUser from "./ManageUser";
 import ManageCategory from "./ManageCategory";
+import ManageBook from "./ManageBook";
 
 export default function Dashboard() {
     const [selectedMenuItem, setSelectedMenuItem] = useState("view_profile");
@@ -33,12 +34,12 @@ export default function Dashboard() {
                 <label htmlFor="my-drawer-2" className="btn btn-primary drawer-button lg:hidden">
                     Open drawer
                 </label>
-                <div className="">
+                <div className="w-full px-5">
                     { selectedMenuItem === 'view_profile' && <ViewProfile user={dbUser} /> }
                     { selectedMenuItem === 'edit' && <EditProfileData setSelectedMenuItem={setSelectedMenuItem}/> }
                     {selectedMenuItem === 'users' && <ManageUser dbUser={dbUser} /> }
                     {selectedMenuItem === 'category' && <ManageCategory /> }
-                    {selectedMenuItem === 'books' && <h1>books data edit in here</h1>}
+                    {selectedMenuItem === 'books' && <ManageBook /> }
                     {selectedMenuItem === 'my_books' && <h1>my_books data edit in here</h1>}
                     {selectedMenuItem === 'payment' && <h1>payment data edit in here</h1>}
                 </div>
