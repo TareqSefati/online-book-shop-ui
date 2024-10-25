@@ -1,12 +1,13 @@
 import { useContext, useState } from "react"
 import { AuthContext } from "../provider/AuthProvider"
-import { Link, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { ROUTES } from "../routes/Routes";
 import EditProfileData from "./EditProfileData";
 import ViewProfile from "./ViewProfile";
 import ManageUser from "./ManageUser";
 import ManageCategory from "./ManageCategory";
 import ManageBook from "./ManageBook";
+import Payment from "./Payment";
 
 export default function Dashboard() {
     const [selectedMenuItem, setSelectedMenuItem] = useState("view_profile");
@@ -17,15 +18,15 @@ export default function Dashboard() {
         setSelectedMenuItem(itemId);
     };
 
-	const handleSignOut = () => {
-		logOut()
-			.then(() => {
-				navigate(ROUTES.LOGIN);
-			})
-			.catch((error) => {
-				console.log(error);
-			});
-	};
+    const handleSignOut = () => {
+        logOut()
+            .then(() => {
+                navigate(ROUTES.LOGIN);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    };
     return (
         <div className="drawer lg:drawer-open border rounded-md shadow-lg mt-3">
             <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
@@ -35,13 +36,13 @@ export default function Dashboard() {
                     Open drawer
                 </label>
                 <div className="w-full px-5">
-                    { selectedMenuItem === 'view_profile' && <ViewProfile user={dbUser} /> }
-                    { selectedMenuItem === 'edit' && <EditProfileData setSelectedMenuItem={setSelectedMenuItem}/> }
-                    {selectedMenuItem === 'users' && <ManageUser dbUser={dbUser} /> }
-                    {selectedMenuItem === 'category' && <ManageCategory /> }
-                    {selectedMenuItem === 'books' && <ManageBook /> }
+                    {selectedMenuItem === 'view_profile' && <ViewProfile user={dbUser} />}
+                    {selectedMenuItem === 'edit' && <EditProfileData setSelectedMenuItem={setSelectedMenuItem} />}
+                    {selectedMenuItem === 'users' && <ManageUser dbUser={dbUser} />}
+                    {selectedMenuItem === 'category' && <ManageCategory />}
+                    {selectedMenuItem === 'books' && <ManageBook />}
                     {selectedMenuItem === 'my_books' && <h1>my_books data edit in here</h1>}
-                    {selectedMenuItem === 'payment' && <h1>payment data edit in here</h1>}
+                    {selectedMenuItem === 'payment' && <Payment />}
                 </div>
             </div>
             <div className="drawer-side">
@@ -49,65 +50,65 @@ export default function Dashboard() {
                 <ul className="menu bg-base-200 text-base-content min-h-full w-80 p-4">
                     {/* Sidebar content here */}
                     <div className="space-y-2">
-                        <img className="w-16 rounded-full" src={dbUser?.photoUrl || "https://i.ibb.co.com/TYSgwLR/default-profile-img.jpg"} />
+                        <img className="size-20 rounded-full" src={dbUser?.photoUrl || "https://i.ibb.co.com/TYSgwLR/default-profile-img.jpg"} />
                         <p>{dbUser?.name || "USER"}</p>
                         <p>{dbUser?.email || ""}</p>
                         <div className="flex justify-between">
                             <button onClick={() => handleMenuItemClick('edit')}
-                                ><a className="btn btn-xs btn-outline">Edit Profile</a>
+                            ><a className="btn btn-xs btn-outline">Edit Profile</a>
                             </button>
                             <button onClick={handleSignOut}>
-                            <a className="btn btn-xs btn-outline btn-error">Logout</a>
+                                <a className="btn btn-xs btn-outline btn-error">Logout</a>
                             </button>
                         </div>
-                        <hr/>
+                        <hr />
                     </div>
 
                     <div className="mt-2">
                         {
                             dbUser?.isAdmin ? (
                                 <div>
-                                    <Link onClick={() => handleMenuItemClick('view_profile')}>
+                                    <NavLink onClick={() => handleMenuItemClick('view_profile')}>
                                         <li>
                                             <a>My Profile <span className="font-semibold text-green-800">(Admin)</span></a>
                                         </li>
-                                    </Link>
-                                    <Link onClick={() => handleMenuItemClick('users')}>
+                                    </NavLink>
+                                    <NavLink onClick={() => handleMenuItemClick('users')}>
                                         <li>
                                             <a>Users</a>
                                         </li>
-                                    </Link>
-                                    <Link onClick={() => handleMenuItemClick('category')}>
+                                    </NavLink>
+                                    <NavLink onClick={() => handleMenuItemClick('category')}>
                                         <li>
                                             <a>Category</a>
                                         </li>
-                                    </Link>
-                                    <Link onClick={() => handleMenuItemClick('books')}>
+                                    </NavLink>
+                                    <NavLink onClick={() => handleMenuItemClick('books')}>
                                         <li>
                                             <a>Books</a>
                                         </li>
-                                    </Link>
+                                    </NavLink>
                                 </div>
-                            ):(
+                            ) : (
                                 <div>
-                                    <Link onClick={() => handleMenuItemClick('view_profile')}>
+                                    <NavLink onClick={() => handleMenuItemClick('view_profile')}>
                                         <li>
                                             <a>My Profile</a>
                                         </li>
-                                    </Link>
-                                    <Link onClick={() => handleMenuItemClick('my_books')}>
+                                    </NavLink>
+                                    <NavLink onClick={() => handleMenuItemClick('my_books')}>
                                         <li>
                                             <a>My Books</a>
                                         </li>
-                                    </Link>
-                                    <Link onClick={() => handleMenuItemClick('payment')}>
+                                    </NavLink>
+                                    <NavLink onClick={() => handleMenuItemClick('payment')}>
                                         <li>
                                             <a>Payment</a>
                                         </li>
-                                    </Link>
+                                    </NavLink>
                                 </div>
                             )
-                        }                        
+                        }
                     </div>
                 </ul>
             </div>

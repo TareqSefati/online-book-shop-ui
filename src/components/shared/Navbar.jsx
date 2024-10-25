@@ -83,11 +83,11 @@ export default function Navbar() {
 				<div className="navbar-end space-x-2">
 					{
 						user ? (
-							<Link to={ROUTES.DASHBOARD}>
+							<NavLink to={ROUTES.DASHBOARD}>
 								<button className="btn btn-sm btn-outline">
 									<FontAwesomeIcon icon={faTableColumns} size="xl" />
 								</button>
-							</Link>
+							</NavLink>
 						) : (
 							<div className="space-x-2 flex gap-1 flex-col items-center md:flex-row">
 								<Link to={ROUTES.LOGIN}><a className="btn btn-sm md:btn">Login</a></Link>
