@@ -15,7 +15,6 @@ export default function ViewProfile(props) {
                     <h2 className="card-title">{user.name}</h2>
                     <p>Email: {user.email}</p>
                     <p>Address: {user.address}</p>
-                    <p>Address: {user.address}</p>
                     <p>Role: {user.isAdmin ? "Admin" : "User"}</p>
                     <p>Status: {user.isEnabled ? "Active" : "Blocked"}</p>
                 </div>

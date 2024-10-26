@@ -38,7 +38,7 @@ export default function ManageBook() {
             .then((data) => {
                 console.log(data);
                 if (data.deletedCount) {
-                    toast.success("User Deleted Successfully", {
+                    toast.success("Book Deleted Successfully", {
                         position: "top-right",
                     });
                     const remainingBooks = books.filter((item) => item._id !== _id);

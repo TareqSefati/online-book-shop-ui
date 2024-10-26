@@ -45,7 +45,7 @@ export default function Payment() {
                                         <td>{buyBook.username}</td>
                                         <td>{buyBook.bookName}</td>
                                         <td>{buyBook.quantity}</td>
-                                        <td>{buyBook.totalPrice}</td>
+                                        <td>{`${buyBook.totalPrice}$`}</td>
                                         <td className="space-x-2">
                                             <button onClick={()=>toast.success("Payment Successfull!", {position: "top-right"})} className="btn btn-sm btn-outline btn-info">
                                                 <FontAwesomeIcon icon={faMoneyBillTransfer} size="sm" />
