@@ -9,6 +9,8 @@ import ManageCategory from "./ManageCategory";
 import ManageBook from "./ManageBook";
 import Payment from "./Payment";
 import { Helmet } from "react-helmet-async";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHamburger } from "@fortawesome/free-solid-svg-icons";
 
 export default function Dashboard() {
     const [selectedMenuItem, setSelectedMenuItem] = useState("view_profile");
@@ -35,10 +37,10 @@ export default function Dashboard() {
             </Helmet>
             <div className="drawer lg:drawer-open border rounded-md shadow-lg mt-3">
                 <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
-                <div className="drawer-content flex flex-col items-center">
+                <div className="drawer-content flex flex-col items-start">
                     {/* Page content here */}
-                    <label htmlFor="my-drawer-2" className="btn btn-primary drawer-button lg:hidden">
-                        Open drawer
+                    <label htmlFor="my-drawer-2" className="btn btn-outline drawer-button lg:hidden">
+                        <FontAwesomeIcon icon={faHamburger} size="xl" />
                     </label>
                     <div className="w-full px-5">
                         {selectedMenuItem === 'view_profile' && <ViewProfile user={dbUser} />}
@@ -46,7 +48,7 @@ export default function Dashboard() {
                         {selectedMenuItem === 'users' && <ManageUser dbUser={dbUser} />}
                         {selectedMenuItem === 'category' && <ManageCategory />}
                         {selectedMenuItem === 'books' && <ManageBook />}
-                        {selectedMenuItem === 'my_books' && <h1>my_books data edit in here</h1>}
+                        {selectedMenuItem === 'my_books' && <Payment />}
                         {selectedMenuItem === 'payment' && <Payment />}
                     </div>
                 </div>
