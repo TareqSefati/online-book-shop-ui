@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 export default function ManageUser({ dbUser }) {
     const [users, setUsers] = useState([]);
     const [editableUser, setEditableUser] = useState({});
+    const [roleChangeEvent, setRoleChangeEvent] = useState(null);
     const url = import.meta.env.VITE_BACKEND_USER_URL;
     useEffect(() => {
         fetch(url)
@@ -16,6 +17,62 @@ export default function ManageUser({ dbUser }) {
             })
             .catch((err) => console.log("Error", err));
     }, [])
+
+    const openRoleChangeModal = (uid, event) => {
+        // setIsAdminChecked(event.target.checked);
+        console.log("Need to change role for uid: ", uid);
+        console.log(event.target.textContent);
+        document.getElementById('roleChangeConfirmationModal').show();
+
+        const roleChangeUser = users.filter((user) => user.uid === uid)[0];
+        console.log("Role change user: ", roleChangeUser);
+        setEditableUser(roleChangeUser);
+        setRoleChangeEvent(event);
+    }
+
+    const hancleRoleChange = (event)=>{
+        event.preventDefault();
+        console.log("Trying to change role of a user.");
+        const updatedUser = {...editableUser, isAdmin: !editableUser.isAdmin};
+        console.log("Updated user for role change: ", updatedUser);
+
+        const dbUrl = `${import.meta.env.VITE_BACKEND_USER_URL}/${editableUser.uid}`;
+        fetch(dbUrl, {
+            method: "PUT",
+            headers: {
+                "content-type": "application/json",
+            },
+            body: JSON.stringify(updatedUser),
+        })
+        .then((res) => res.json())
+        .then((data) => {
+            console.log(data);
+            if (data.modifiedCount) {
+                toast.success("User Updated Successfully", {
+                    position: "top-right",
+                });
+                fetch(import.meta.env.VITE_BACKEND_USER_URL)
+                .then((res) => res.json())
+                .then((data) => {
+                    console.log(data);
+                    setUsers(data);
+                })
+                {
+                    updatedUser.isAdmin ? 
+                    (roleChangeEvent.target.textContent='Admin'):(roleChangeEvent.target.textContent='User')
+                }
+
+            }
+            document.getElementById('roleChangeConfirmationModal').close();
+            //event.target.reset(); //to clear inpur fields after submit- but it does not work here due to default value.
+        })
+        .catch((err) => {
+            toast.error("User Update Failed!", {
+                position: "top-right",
+            });
+            console.log("Error", err);
+        })
+    }
 
     const handleDelete = (uid) => {
         const url = import.meta.env.VITE_BACKEND_USER_URL;
@@ -57,15 +114,15 @@ export default function ManageUser({ dbUser }) {
 
         // console.log(name, phone, address, email, password, photo);
         let photoUrl = editableUser.photoUrl;
-        if (photo){
+        if (photo) {
             const photoData = new FormData();
             photoData.append('image', photo);
             const url = await uploadImage(photoData);
-            if(url){
+            if (url) {
                 photoUrl = url;
             }
         }
-        const updatedUser = { name, photoUrl, phoneNumber, address, isAdmin:editableUser.isAdmin, isEnabled:editableUser.isEnabled };
+        const updatedUser = { name, photoUrl, phoneNumber, address, isAdmin: editableUser.isAdmin, isEnabled: editableUser.isEnabled };
         console.log("UpdatedUser:", updatedUser);
 
         const dbUrl = `${import.meta.env.VITE_BACKEND_USER_URL}/${editableUser.uid}`;
@@ -77,49 +134,49 @@ export default function ManageUser({ dbUser }) {
             },
             body: JSON.stringify(updatedUser),
         })
-        .then((res) => res.json())
-        .then((data) => {
-            console.log(data);
-            if (data.modifiedCount) {
-                toast.success("User Updated Successfully", {
+            .then((res) => res.json())
+            .then((data) => {
+                console.log(data);
+                if (data.modifiedCount) {
+                    toast.success("User Updated Successfully", {
+                        position: "top-right",
+                    });
+                    fetch(import.meta.env.VITE_BACKEND_USER_URL)
+                        .then((res) => res.json())
+                        .then((data) => {
+                            console.log(data);
+                            setUsers(data);
+                        })
+                }
+                document.getElementById('modal').close();
+                //event.target.reset(); //to clear inpur fields after submit- but it does not work here due to default value.
+            })
+            .catch((err) => {
+                toast.error("User Update Failed!", {
                     position: "top-right",
                 });
-                fetch(import.meta.env.VITE_BACKEND_USER_URL)
-                .then((res) => res.json())
-                .then((data) => {
-                    console.log(data);
-                    setUsers(data);
-                })
-            }
-            document.getElementById('modal').close();
-            //event.target.reset(); //to clear inpur fields after submit- but it does not work here due to default value.
-        })
-        .catch((err)=>{
-            toast.error("User Update Failed!", {
-                position: "top-right",
-            });
-            console.log("Error", err);
-        })
+                console.log("Error", err);
+            })
     }
 
-    const uploadImage = async(photoData)=>{
-		//upload image to imagebb and get image url
-		const url = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMAGE_BB_API_KEY}`;
-		let displayUrl = await fetch(url, {
-			method: 'POST',
-			body: photoData,
-		})
-		.then((res)=>res.json())
-		.then((result)=>{
-			console.log("Image display url:", result.data.display_url);
-			return result.data.display_url;
-		})
-		.catch((error)=>{
-			console.log("Error while uploading image to imagebb: ", error);
-			return null;
-		});
-		return displayUrl;
-	}
+    const uploadImage = async (photoData) => {
+        //upload image to imagebb and get image url
+        const url = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMAGE_BB_API_KEY}`;
+        let displayUrl = await fetch(url, {
+            method: 'POST',
+            body: photoData,
+        })
+            .then((res) => res.json())
+            .then((result) => {
+                console.log("Image display url:", result.data.display_url);
+                return result.data.display_url;
+            })
+            .catch((error) => {
+                console.log("Error while uploading image to imagebb: ", error);
+                return null;
+            });
+        return displayUrl;
+    }
 
     return (
         <div>
@@ -160,7 +217,32 @@ export default function ManageUser({ dbUser }) {
                                             <td>{user.name}</td>
                                             <td>{user.email}</td>
                                             <td>
-                                                {user.isAdmin ? ("Admin") : ("User")}
+                                                {/* {
+                                                    user.isAdmin ? (
+                                                        <>
+                                                        <button onClick={(event)=>handleRoleChange(user.uid, event)} className="btn btn-xs btn-outline">Admin</button>
+                                                        </>
+                                                    ) : (
+                                                        <>
+                                                            <button onClick={(event)=>handleRoleChange(user.uid, event)} className="btn btn-xs btn-outline">User</button>
+                                                        </>
+                                                    )
+                                                } */}
+
+                                                <button id="roleBtn" onClick={(event)=>openRoleChangeModal(user.uid, event)} className="btn btn-xs btn-outline"> {user.isAdmin ? ("Admin") : ("User")} </button>
+
+                                                {/* <p id="roleBtn" onClick={()=>handleRoleChange(user.uid)} >{user.isAdmin ? ("User") : ("Admin")}</p> */}
+
+                                                {/* {user.isAdmin ? ("Admin") : ("User")}
+                                                <input type="checkbox" className="toggle" value="true" /> */}
+
+                                                {/* {user.isAdmin && (
+                                                    <button onClick={handleRoleChange}>{isAdminChecked ? 'On' : 'Off'}</button>
+                                                )} */}
+
+                                                {/* {user.isAdmin ? ("Admin") : ("User")}
+                                                <input type="checkbox" className="toggle" value={isAdminChecked} onChange={handleRoleChange} /> */}
+
                                                 {/* todo: can toggle role in here and update db also */}
 
                                                 {/* <input type="checkbox" checked={user.isAdmin} onChange={()=>user.isAdmin = !user.isAdmin} className="toggle toggle-success" /> */}
@@ -194,121 +276,149 @@ export default function ManageUser({ dbUser }) {
             <dialog id="modal" className="modal sm:modal-middle">
                 <div className="modal-box">
                     <form
-                            onSubmit={editUser} method="dialog"
-                            className="flex flex-col gap-4 pb-4"
-                        >
-                            <h1 className="mb-4 text-2xl font-bold dark:text-white text-center">
-                                Update your Account
-                            </h1>
+                        onSubmit={editUser} method="dialog"
+                        className="flex flex-col gap-4 pb-4"
+                    >
+                        <h1 className="mb-4 text-2xl font-bold dark:text-white text-center">
+                            Update your Account
+                        </h1>
 
-                            <div>
-                                <div className="mb-2">
-                                    <label
-                                        className="text-sm font-medium text-gray-900 dark:text-gray-300"
-                                        htmlFor="name"
-                                    >
-                                        Name
-                                    </label>
-                                </div>
-                                <div className="flex w-full rounded-lg pt-1">
-                                    <div className="relative w-full">
-                                        <input
-                                            className="block w-full border disabled:cursor-not-allowed disabled:opacity-50 bg-gray-50 border-gray-300 text-gray-900 focus:border-cyan-500 focus:ring-cyan-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-cyan-500 dark:focus:ring-cyan-500 p-2.5 text-sm rounded-md"
-                                            id="name"
-                                            type="text"
-                                            name="name"
-                                            defaultValue={editableUser.name}
-                                            autoComplete="on"
-                                            required
-                                        ></input>
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <div className="mb-2">
-                                    <label
-                                        className="text-sm font-medium text-gray-900 dark:text-gray-300"
-                                        htmlFor="photo"
-                                    >
-                                        Photo
-                                    </label>
-                                </div>
-                                <div className="flex w-full rounded-lg pt-1">
-                                    <div className="relative w-full">
-                                        <input
-                                            className="block w-full border disabled:cursor-not-allowed disabled:opacity-50 bg-gray-50 border-gray-300 text-gray-900 focus:border-cyan-500 focus:ring-cyan-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-cyan-500 dark:focus:ring-cyan-500 p-2.5 text-sm rounded-md"
-                                            id="photo"
-                                            type="file"
-                                            name="photo"
-                                            placeholder="Select prifile picture"
-                                            autoComplete="on"
-                                        ></input>
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <div className="mb-2">
-                                    <label
-                                        className="text-sm font-medium text-gray-900 dark:text-gray-300"
-                                        htmlFor="phone"
-                                    >
-                                        Phone Number
-                                    </label>
-                                </div>
-                                <div className="flex w-full rounded-lg pt-1">
-                                    <div className="relative w-full">
-                                        <input
-                                            className="block w-full border disabled:cursor-not-allowed disabled:opacity-50 bg-gray-50 border-gray-300 text-gray-900 focus:border-cyan-500 focus:ring-cyan-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-cyan-500 dark:focus:ring-cyan-500 p-2.5 text-sm rounded-md"
-                                            id="phone"
-                                            type="tel"
-                                            name="phone"
-                                            defaultValue={editableUser.phoneNumber}
-                                            autoComplete="on"
-                                            required
-                                        ></input>
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <div className="mb-2">
-                                    <label
-                                        className="text-sm font-medium text-gray-900 dark:text-gray-300"
-                                        htmlFor="address"
-                                    >
-                                        Address
-                                    </label>
-                                </div>
-                                <div className="flex w-full rounded-lg pt-1">
-                                    <div className="relative w-full">
-                                        <input
-                                            className="block w-full border disabled:cursor-not-allowed disabled:opacity-50 bg-gray-50 border-gray-300 text-gray-900 focus:border-cyan-500 focus:ring-cyan-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-cyan-500 dark:focus:ring-cyan-500 p-2.5 text-sm rounded-md"
-                                            id="address"
-                                            type="text"
-                                            name="address"
-                                            defaultValue={editableUser.address}
-                                            autoComplete="on"
-                                            required
-                                        ></input>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="flex flex-col gap-2">
-                                <button type="submit"
-                                    className="btn btn-outline btn-info rounded-md"
+                        <div>
+                            <div className="mb-2">
+                                <label
+                                    className="text-sm font-medium text-gray-900 dark:text-gray-300"
+                                    htmlFor="name"
                                 >
-                                    <span className="flex items-center justify-center gap-1 font-medium py-1 px-2.5 text-base false">
-                                        Update
-                                    </span>
-                                </button>
-                                <p className="btn btn-outline rounded-md" onClick={()=>document.getElementById('modal').close()}>
-                                    <span className="flex items-center justify-center gap-1 font-medium py-1 px-2.5 text-base false">
-                                        Cancel
-                                    </span>
-                                </p>
-                                
+                                    Name
+                                </label>
                             </div>
-                        </form>
+                            <div className="flex w-full rounded-lg pt-1">
+                                <div className="relative w-full">
+                                    <input
+                                        className="block w-full border disabled:cursor-not-allowed disabled:opacity-50 bg-gray-50 border-gray-300 text-gray-900 focus:border-cyan-500 focus:ring-cyan-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-cyan-500 dark:focus:ring-cyan-500 p-2.5 text-sm rounded-md"
+                                        id="name"
+                                        type="text"
+                                        name="name"
+                                        defaultValue={editableUser.name}
+                                        autoComplete="on"
+                                        required
+                                    ></input>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div className="mb-2">
+                                <label
+                                    className="text-sm font-medium text-gray-900 dark:text-gray-300"
+                                    htmlFor="photo"
+                                >
+                                    Photo
+                                </label>
+                            </div>
+                            <div className="flex w-full rounded-lg pt-1">
+                                <div className="relative w-full">
+                                    <input
+                                        className="block w-full border disabled:cursor-not-allowed disabled:opacity-50 bg-gray-50 border-gray-300 text-gray-900 focus:border-cyan-500 focus:ring-cyan-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-cyan-500 dark:focus:ring-cyan-500 p-2.5 text-sm rounded-md"
+                                        id="photo"
+                                        type="file"
+                                        name="photo"
+                                        placeholder="Select prifile picture"
+                                        autoComplete="on"
+                                    ></input>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div className="mb-2">
+                                <label
+                                    className="text-sm font-medium text-gray-900 dark:text-gray-300"
+                                    htmlFor="phone"
+                                >
+                                    Phone Number
+                                </label>
+                            </div>
+                            <div className="flex w-full rounded-lg pt-1">
+                                <div className="relative w-full">
+                                    <input
+                                        className="block w-full border disabled:cursor-not-allowed disabled:opacity-50 bg-gray-50 border-gray-300 text-gray-900 focus:border-cyan-500 focus:ring-cyan-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-cyan-500 dark:focus:ring-cyan-500 p-2.5 text-sm rounded-md"
+                                        id="phone"
+                                        type="tel"
+                                        name="phone"
+                                        defaultValue={editableUser.phoneNumber}
+                                        autoComplete="on"
+                                        required
+                                    ></input>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div className="mb-2">
+                                <label
+                                    className="text-sm font-medium text-gray-900 dark:text-gray-300"
+                                    htmlFor="address"
+                                >
+                                    Address
+                                </label>
+                            </div>
+                            <div className="flex w-full rounded-lg pt-1">
+                                <div className="relative w-full">
+                                    <input
+                                        className="block w-full border disabled:cursor-not-allowed disabled:opacity-50 bg-gray-50 border-gray-300 text-gray-900 focus:border-cyan-500 focus:ring-cyan-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-cyan-500 dark:focus:ring-cyan-500 p-2.5 text-sm rounded-md"
+                                        id="address"
+                                        type="text"
+                                        name="address"
+                                        defaultValue={editableUser.address}
+                                        autoComplete="on"
+                                        required
+                                    ></input>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="flex flex-col gap-2">
+                            <button type="submit"
+                                className="btn btn-outline btn-info rounded-md"
+                            >
+                                <span className="flex items-center justify-center gap-1 font-medium py-1 px-2.5 text-base false">
+                                    Update
+                                </span>
+                            </button>
+                            <p className="btn btn-outline rounded-md" onClick={() => document.getElementById('modal').close()}>
+                                <span className="flex items-center justify-center gap-1 font-medium py-1 px-2.5 text-base false">
+                                    Cancel
+                                </span>
+                            </p>
+
+                        </div>
+                    </form>
+                </div>
+            </dialog>
+
+            {/* modal role change confirmation */}
+            <dialog id="roleChangeConfirmationModal" className="modal sm:modal-middle">
+                <div className="modal-box border">
+                    <form
+                        onSubmit={hancleRoleChange} method="dialog"
+                        className="flex flex-col gap-4 pb-4"
+                    >
+                        <h1 className="mb-4 text-xl font-semibold dark:text-white text-center">
+                            Are you sure to change the role for this user?
+                        </h1>
+                        <div className="flex justify-end gap-2">
+                            <button type="submit"
+                                className="btn btn-outline btn-info rounded-md"
+                            >
+                                <span className="flex items-center justify-center gap-1 font-medium py-1 px-2.5 text-base false">
+                                    Confirm
+                                </span>
+                            </button>
+                            <p className="btn btn-outline rounded-md" onClick={() => document.getElementById('roleChangeConfirmationModal').close()}>
+                                <span className="flex items-center justify-center gap-1 font-medium py-1 px-2.5 text-base false">
+                                    Cancel
+                                </span>
+                            </p>
+                        </div>
+                    </form>
                 </div>
             </dialog>
         </div>
