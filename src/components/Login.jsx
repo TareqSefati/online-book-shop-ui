@@ -4,6 +4,7 @@ import { useContext } from "react";
 import { AuthContext } from "../provider/AuthProvider";
 import toast from "react-hot-toast";
 import { GithubAuthProvider, GoogleAuthProvider } from "firebase/auth";
+import { Helmet } from "react-helmet-async";
 
 export default function Login() {
     const navigate = useNavigate();
@@ -65,6 +66,9 @@ export default function Login() {
     };
 	return (
 		<div>
+			<Helmet>
+				<title>Login</title>
+			</Helmet>
 			<div className="py-8 bg-base-200 shadow-xl rounded-lg">
 				<div className="flex h-full items-center justify-center ">
 					<div className="rounded-lg border border-gray-200 bg-white shadow-md dark:border-gray-700 dark:bg-gray-900 flex-col flex h-full items-center justify-center sm:px-4">

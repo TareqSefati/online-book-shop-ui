@@ -1,5 +1,6 @@
 import { useLoaderData } from "react-router-dom";
 import BookCard from "./BookCard";
+import { Helmet } from "react-helmet-async";
 
 export default function AllBooks() {
     const loaderData = useLoaderData();
@@ -9,6 +10,9 @@ export default function AllBooks() {
     }
     return (
         <section>
+            <Helmet>
+				<title>All Books</title>
+			</Helmet>
             <div className="mb-5 mt-10">
                 <h1
                     className="text-center font-semibold text-5xl mb-5"

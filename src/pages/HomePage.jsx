@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async";
 import AboutUs from "../components/AboutUs";
 import Banner from "../components/Banner";
 import Categories from "../components/Categories";
@@ -7,16 +8,22 @@ import Features from "../components/Features";
 import UserReview from "../components/UserReview";
 
 export default function HomePage() {
-	return (
-        <div>
-            <Banner />
-            {/* <Guidelines /> */}
-            <Categories />
-            <Features />
-            <UserReview />
-            {/* <CourseGallery />
+    return (
+        <>
+            <Helmet>
+                <title>Online Book Shop</title>
+            </Helmet>
+            <div>
+                <Banner />
+                {/* <Guidelines /> */}
+                <Categories />
+                <Features />
+                <UserReview />
+                {/* <CourseGallery />
             <ContactUs />
             <AboutUs /> */}
-        </div>
+            </div>
+        </>
+
     );
 }

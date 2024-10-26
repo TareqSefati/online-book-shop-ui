@@ -1,6 +1,11 @@
+import { Helmet } from "react-helmet-async";
+
 export default function Faq() {
 	return (
 		<section>
+			<Helmet>
+				<title>FAQ</title>
+			</Helmet>
 			<div className="mb-5 mt-10">
 				<h1 className="text-center font-semibold text-5xl mb-5">FAQ</h1>
 				<hr className="w-3/4 mx-auto" />
